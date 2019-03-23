@@ -9,9 +9,11 @@ object Riddle19 {
    *
    * Use case: Transform any listener into an Observable.
    */
-  fun solve(interaction: Interaction): Observable<Int> {
-    TODO()
-  }
+  fun solve(interaction: Interaction): Observable<Int> =
+          Observable.create<Int> { emitter ->
+              interaction.listener = { emitter.onNext(it) }
+              emitter.setCancellable { interaction.listener = null }
+          }
 
   interface Interaction {
     var listener: ((Int) -> Unit)?
